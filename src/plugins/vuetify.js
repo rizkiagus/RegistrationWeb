@@ -9,6 +9,7 @@ export default new Vuetify({
       light: {
         second: "#2a3158",
         third: "#b4bbe2",
+        four: "#dcdcdc",
       },
     },
   },

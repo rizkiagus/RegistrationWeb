@@ -13,6 +13,7 @@
             <p>Tempat /TglLahir</p>
             <p>Sekolah Asal</p>
             <p>No. HP</p>
+            <p>Email</p>
           </v-col>
           <v-col cols="6">
             <p class="text-capitalize">: {{ data.nama }}</p>
@@ -23,6 +24,7 @@
             </p>
             <p class="text-capitalize">: {{ data.sekolah_asal }}</p>
             <p class="text-capitalize">: {{ data.telp }}</p>
+            <p>: {{ data.email }}</p>
           </v-col>
           <v-col cols="4">
             <v-img :src="data.pass_foto"></v-img>
@@ -47,7 +49,7 @@
         </v-row>
       </div>
       <div class="berkas pb-4">
-        <h4 class="font-weight-bold second--text">Data Orang Tua / Wali</h4>
+        <h4 class="font-weight-bold second--text">Data Berkas Siswa</h4>
         <v-divider class="mb-5"></v-divider>
         <v-row>
           <v-col cols="3">

@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="about four">
     <navbar />
     <div class="main">
       <v-carousel cycle hide-delimiters>

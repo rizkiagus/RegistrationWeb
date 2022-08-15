@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="indigo lighten-5">
     <div class="main">
       <v-container>
         <v-form
@@ -9,6 +9,7 @@
           @submit.prevent="daftar"
         >
           <div class="datadirisiswa">
+            <v-img :src="urllogo" width="100" class="mx-auto"></v-img>
             <h2 class="text-capitalize second--text text-center">
               formulir pendaftaran siswa baru
             </h2>
@@ -71,7 +72,6 @@
                       :items="[
                         'SMK: Teknik Komputer Jaringan',
                         'SMK: Teknik Kendaraan Ringan',
-                        'SMA: IPA',
                       ]"
                     >
                     </v-select>
@@ -134,7 +134,12 @@
                       dense
                       v-model="siswa.telp"
                       required
-                      :rules="[(v) => !!v || 'Tidak Boleh Kosong']"
+                      counter="13"
+                      :rules="[
+                        (v) => !!v || 'Tidak Boleh Kosong',
+                        (v) => v.length <= 13 || 'Max 13 Karakter',
+                        (v) => v.length >= 12 || 'Min 12 Karakter',
+                      ]"
                       type="number"
                     >
                     </v-text-field>
@@ -149,7 +154,22 @@
                       :rules="[(v) => !!v || 'Tidak Boleh Kosong']"
                       show-size
                       counter
+                      class="mt-10"
                     ></v-file-input>
+                    <v-text-field
+                      label="Email"
+                      outlined
+                      dense
+                      :rules="[
+                        (email) => !!email || 'Tidak Boleh Kosong',
+                        (email) =>
+                          /^(([^<>()[\]\\.,;:\s@']+(\.[^<>()\\[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+                            email
+                          ) || 'Pastikan E-mail Anda Benar',
+                      ]"
+                      v-model="siswa.email"
+                    >
+                    </v-text-field>
                   </v-col>
                 </v-row>
 
@@ -187,7 +207,12 @@
                       required
                       type="number"
                       v-model="orangtua.telp"
-                      :rules="[(v) => !!v || 'Tidak Boleh Kosong']"
+                      counter="13"
+                      :rules="[
+                        (v) => !!v || 'Tidak Boleh Kosong',
+                        (v) => v.length <= 13 || 'Max 13 Karakter',
+                        (v) => v.length >= 12 || 'Min 12 Karakter',
+                      ]"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -352,6 +377,7 @@ export default {
   name: "PendaftaranView",
   data() {
     return {
+      urllogo: require("@/assets/logoinpur.png"),
       persyaratanDialog: false,
       pembayaran: false,
       valid: false,
@@ -385,6 +411,7 @@ export default {
         tempat_lahir: "",
         agama: "",
         alamat: "",
+        email: "",
         sekolah_asal: "",
         pass_foto: "",
         status_bayar: "belum bayar",

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="four">
     <navbar />
     <v-parallax src="@/assets/hero.jpg">
       <v-row align="center" justify="center">
@@ -31,7 +31,7 @@
         <div class="listcard">
           <v-row>
             <v-col cols="3" v-for="(list, index) in fitur" :key="index">
-              <v-card height="250" hover color="third" outlined>
+              <v-card height="250" hover :color="list.color" outlined>
                 <v-img
                   class="imgcard mt-4 ms-4 mb-0"
                   :src="list.icon"
@@ -59,7 +59,7 @@
         <h2 class="second--text my-5 text-center">
           Pertanyaan Yang Sering Ditanyakan
         </h2>
-        <v-expansion-panels multiple>
+        <v-expansion-panels multiple flat>
           <v-expansion-panel
             v-for="(listask, i) in ask"
             :key="i"
@@ -115,23 +115,27 @@ export default {
           title: "Lab Komputer",
           icon: require("@/assets/pc.png"),
           description: "Adanya lab komputer untuk membantu sistem belajar",
+          color: "#7986cb",
         },
         {
           title: "Lab Bahasa",
           icon: require("@/assets/conference.png"),
           description:
             "Adanya lab bahasa inggris untuk membantu siswa untuk belajar berbahasa inggris",
+          color: "#8e24aa",
         },
         {
           title: "perpustakaan",
           icon: require("@/assets/book.png"),
           description:
             "Adanya perpustakaan memudahkan para siswa untuk belajar dan membaca",
+          color: "#00b4d8",
         },
         {
           title: "Ruang Praktek",
           icon: require("@/assets/practice.png"),
           description: "Menyediakan layanan ruang praktek untuk siswa",
+          color: "#439534",
         },
       ],
       ask: [

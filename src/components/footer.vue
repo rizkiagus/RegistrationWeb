@@ -4,9 +4,13 @@
       <v-card flat tile class="indigo lighten-1">
         <div class="d-flex">
           <v-card-text class="white--text">
-            <h3>Telepon</h3>
-            <p class="caption mb-0">Telp. (061)7864701</p>
-            <p class="caption mb-0">Fax: (061)7864702</p>
+            <h3>Hubungi Kami</h3>
+            <v-btn icon class="white--text">
+              <v-icon size="24px">mdi-phone</v-icon>
+            </v-btn>
+            <v-btn icon class="white--text">
+              <v-icon size="24px">mdi-whatsapp</v-icon>
+            </v-btn>
           </v-card-text>
           <v-card-text class="white--text">
             <h3>Media Sosial</h3>

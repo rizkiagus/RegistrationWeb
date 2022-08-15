@@ -2,13 +2,39 @@
   <v-data-table
     :headers="headers"
     :items="dataSiswa"
-    sort-by="nama"
+    :search="search"
     class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Daftar Siswa Yang Sudah Mendaftar</v-toolbar-title>
       </v-toolbar>
+      <v-card flat>
+        <v-card-title class="body-2">Filter</v-card-title>
+        <v-row class="mx-1">
+          <v-col
+            ><v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              outlined
+              dense
+              hide-details
+            ></v-text-field
+          ></v-col>
+          <v-col>
+            <v-select
+              outlined
+              dense
+              label="Filter Berdasarkan Jurusan"
+              v-model="pilih"
+              :items="jurusan"
+            >
+            </v-select>
+          </v-col>
+        </v-row>
+      </v-card>
     </template>
     <template v-slot:[`item.id`]="{ item }">
       <v-btn plain small class="text-capitalize" @click="goto(item.id)">
@@ -22,21 +48,41 @@ import router from "@/router";
 export default {
   name: "SiswaView",
   data: () => ({
+    search: "",
+    pilih: null,
+    jurusan: [
+      {
+        text: "Semua",
+        value: null,
+      },
+      {
+        text: "SMK: Teknik Komputer Jaringan",
+        value: "SMK: Teknik Komputer Jaringan",
+      },
+      {
+        text: "SMK: Teknik Kendaraan Ringan",
+        value: "SMK: Teknik Kendaraan Ringan",
+      },
+    ],
     dialog: false,
     dialogDelete: false,
-    headers: [
-      {
-        text: "Nama Siswa",
-        align: "start",
-        sortable: false,
-        value: "nama",
-      },
-      { text: "Agama", value: "agama" },
-      { text: "Sekolah Asal", value: "sekolah_asal" },
-      { text: "Jurusan Yang Diambil", value: "jurusan" },
-      { text: "Nomor HP", value: "telp" },
-      { text: "Aksi", value: "id", align: "center", sortable: false },
-    ],
+    // headers: [
+    //   {
+    //     text: "Nama Siswa",
+    //     align: "start",
+    //     sortable: false,
+    //     value: "nama",
+    //     filter: this.filterJurusan,
+    //   },
+    //   { text: "Agama", value: "agama" },
+    //   { text: "Sekolah Asal", value: "sekolah_asal" },
+    //   {
+    //     text: "Jurusan Yang Diambil",
+    //     value: "jurusan",
+    //   },
+    //   { text: "Nomor HP", value: "telp" },
+    //   { text: "Aksi", value: "id", align: "center", sortable: false },
+    // ],
     gotoIndex: "",
     desserts: [],
     editedIndex: -1,
@@ -57,6 +103,25 @@ export default {
   }),
 
   computed: {
+    headers() {
+      return [
+        {
+          text: "Nama Siswa",
+          align: "start",
+          sortable: false,
+          value: "nama",
+        },
+        { text: "Agama", value: "agama" },
+        { text: "Sekolah Asal", value: "sekolah_asal" },
+        {
+          text: "Jurusan Yang Diambil",
+          value: "jurusan",
+          filter: this.filterJurusan,
+        },
+        { text: "Nomor HP", value: "telp" },
+        { text: "Aksi", value: "id", align: "center", sortable: false },
+      ];
+    },
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
@@ -82,6 +147,12 @@ export default {
   },
 
   methods: {
+    filterJurusan(value) {
+      if (!this.pilih) {
+        return true;
+      }
+      return value === this.pilih;
+    },
     goto(id) {
       this.gotoIndex = router.push(`/siswa/detail/${id}`);
     },
