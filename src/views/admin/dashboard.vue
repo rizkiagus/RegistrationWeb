@@ -6,13 +6,13 @@
         <v-card class="mx-2" color="#00b4d8" flat>
           <v-card-title class="body-2"> Siswa Mendaftar TKJ </v-card-title>
           <v-card-subtitle class="font-weight-bold">
-            {{ jumlahtkj }} Orang
+            {{ jumlahtkj ? jumlahtkj : 0 }} Orang
           </v-card-subtitle>
         </v-card>
         <v-card class="mx-2" color="#439534" flat>
           <v-card-title class="body-2"> Siswa Mendaftar TKR </v-card-title>
           <v-card-subtitle class="font-weight-bold">
-            {{ jumlahtkr }} Orang
+            {{ jumlahtkr ? jumlahtkrj : 0 }} Orang
           </v-card-subtitle>
         </v-card>
       </div>

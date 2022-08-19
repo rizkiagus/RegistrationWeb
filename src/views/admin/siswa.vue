@@ -1,53 +1,69 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="dataSiswa"
-    :search="search"
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <v-toolbar flat>
-        <v-toolbar-title>Daftar Siswa Yang Sudah Mendaftar</v-toolbar-title>
-      </v-toolbar>
-      <v-card flat>
-        <v-card-title class="body-2">Filter</v-card-title>
-        <v-row class="mx-1">
-          <v-col
-            ><v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              outlined
-              dense
-              hide-details
-            ></v-text-field
-          ></v-col>
-          <v-col>
-            <v-select
-              outlined
-              dense
-              label="Filter Berdasarkan Jurusan"
-              v-model="pilih"
-              :items="jurusan"
-            >
-            </v-select>
-          </v-col>
-        </v-row>
-      </v-card>
-    </template>
-    <template v-slot:[`item.id`]="{ item }">
-      <v-btn plain small class="text-capitalize" @click="goto(item.id)">
-        Lihat Detail
-      </v-btn>
-    </template>
-  </v-data-table>
+  <div>
+    <v-data-table
+      :headers="headers"
+      :items="itemsWithIndex"
+      :search="search"
+      class="elevation-1"
+    >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>Daftar Siswa Yang Sudah Mendaftar</v-toolbar-title>
+        </v-toolbar>
+        <v-card flat>
+          <v-card-title class="body-2">Filter</v-card-title>
+          <v-row class="mx-1">
+            <v-col
+              ><v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                outlined
+                dense
+                hide-details
+              ></v-text-field>
+              <v-btn
+                @click="download"
+                depressed
+                class="my-4 text-capitalize"
+                color="indigo lighten-3"
+              >
+                Download
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-select
+                outlined
+                dense
+                label="Filter Berdasarkan Jurusan"
+                v-model="pilih"
+                :items="jurusan"
+              >
+              </v-select>
+            </v-col>
+          </v-row>
+        </v-card>
+      </template>
+      <template v-slot:[`item.id`]="{ item }">
+        <v-btn plain small class="text-capitalize" @click="goto(item.id)">
+          Lihat Detail
+        </v-btn>
+      </template>
+      <template v-slot:[`item.nomor`]="{ index }">
+        {{ index + 1 }}
+      </template>
+    </v-data-table>
+  </div>
 </template>
 <script>
 import router from "@/router";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 export default {
   name: "SiswaView",
   data: () => ({
+    name: "makan",
     search: "",
     pilih: null,
     jurusan: [
@@ -106,24 +122,37 @@ export default {
     headers() {
       return [
         {
+          text: "No",
+          align: "start",
+          sortable: true,
+          value: "nomor",
+        },
+        {
           text: "Nama Siswa",
           align: "start",
           sortable: false,
           value: "nama",
         },
-        { text: "Agama", value: "agama" },
-        { text: "Sekolah Asal", value: "sekolah_asal" },
+        { text: "Agama", value: "agama", sortable: false },
+        { text: "Sekolah Asal", value: "sekolah_asal", sortable: false },
         {
           text: "Jurusan Yang Diambil",
           value: "jurusan",
           filter: this.filterJurusan,
+          sortable: false,
         },
-        { text: "Nomor HP", value: "telp" },
+        { text: "Nomor HP", value: "telp", sortable: false },
         { text: "Aksi", value: "id", align: "center", sortable: false },
       ];
     },
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+    itemsWithIndex() {
+      return this.dataSiswa.map((dataSiswa, index) => ({
+        ...dataSiswa,
+        index: index + 1,
+      }));
     },
     dataSiswa() {
       return this.$store.state.siswa.datasiswa;
@@ -147,6 +176,29 @@ export default {
   },
 
   methods: {
+    download() {
+      const columns = [
+        { title: "No", dataKey: "index" },
+        { title: "Nama", dataKey: "nama" },
+        { title: "Agama", dataKey: "agama" },
+        { title: "Sekolah Asal", dataKey: "sekolah_asal" },
+        { title: "Jurusan Yang Diambil", dataKey: "jurusan" },
+        { title: "No. HP", dataKey: "telp" },
+      ];
+      let pdfName = "Siswa Terdaftar";
+      var doc = new jsPDF({
+        orientation: "portrait",
+        unit: "in",
+        format: "letter",
+      });
+      doc.setFontSize(16).text("Daftar Siswa Yang Mendaftar", 0.5, 1.0);
+      autoTable(doc, {
+        columns,
+        body: this.itemsWithIndex,
+        margin: { left: 0.5, top: 1.25 },
+      });
+      doc.save(pdfName + ".pdf");
+    },
     filterJurusan(value) {
       if (!this.pilih) {
         return true;
