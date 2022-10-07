@@ -105,6 +105,8 @@
                         v-model="siswa.tgl_lahir"
                         no-title
                         scrollable
+                        :max="getEndDate"
+                        min="1990-06-15"
                       >
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="menu = false">
@@ -383,6 +385,7 @@ export default {
       valid: false,
       menu: false,
       modal: false,
+      date: new Date(),
       jeniskelamin: ["Laki-Laki", "Perempuan"],
       agama: ["Islam", "Kristen", "Hindu", "Budha", "Lainnya"],
       orangtua: {
@@ -480,6 +483,10 @@ export default {
   computed: {
     isLoading() {
       return this.$store.state.auth.isLoading;
+    },
+    getEndDate() {
+     const endDate = new Date();
+     return endDate.toISOString().slice(0,10)
     },
   },
   created() {

@@ -66,6 +66,7 @@ export default {
     name: "makan",
     search: "",
     pilih: null,
+    year: new Date(),
     jurusan: [
       {
         text: "Semua",
@@ -82,23 +83,6 @@ export default {
     ],
     dialog: false,
     dialogDelete: false,
-    // headers: [
-    //   {
-    //     text: "Nama Siswa",
-    //     align: "start",
-    //     sortable: false,
-    //     value: "nama",
-    //     filter: this.filterJurusan,
-    //   },
-    //   { text: "Agama", value: "agama" },
-    //   { text: "Sekolah Asal", value: "sekolah_asal" },
-    //   {
-    //     text: "Jurusan Yang Diambil",
-    //     value: "jurusan",
-    //   },
-    //   { text: "Nomor HP", value: "telp" },
-    //   { text: "Aksi", value: "id", align: "center", sortable: false },
-    // ],
     gotoIndex: "",
     desserts: [],
     editedIndex: -1,
@@ -191,7 +175,7 @@ export default {
         unit: "in",
         format: "letter",
       });
-      doc.setFontSize(16).text("Daftar Siswa Yang Mendaftar", 0.5, 1.0);
+      doc.setFontSize(16).text(`Daftar Siswa Yang Mendaftar Pada Tahun Ajaran ${this.year.getFullYear()} / ${this.year.getFullYear()+1}`, 0.5, 1.0);
       autoTable(doc, {
         columns,
         body: this.itemsWithIndex,

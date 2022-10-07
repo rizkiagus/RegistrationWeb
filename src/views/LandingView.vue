@@ -159,6 +159,11 @@ export default {
           description:
             "Mendapatkan bakal pakaian kotak-kotak dan pakaian olahraga.",
         },
+        {
+          title: "Bagaimana Cara Mendaftar?",
+          description:
+            "Silahkan masuk ke tab Formulir Pendaftaran, lalu isi data diri siswa dan orang tua, serta upload berkas yang dibutuhkan.",
+        },
       ],
     };
   },
