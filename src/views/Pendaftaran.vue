@@ -457,7 +457,7 @@ export default {
       this.getBase64(this.skhun).then((data) => {
         this.berkas.skhun_image = data;
       });
-      axios
+      await axios
         .post("http://127.0.0.1:8000/api/daftar", this.siswa)
         .then((response) => {
           this.orangtua.siswa_id = response.data.data.id_siswa;

@@ -8,9 +8,10 @@
       class="elevation-1"
     >
       <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>Daftar Siswa Yang Sudah Mendaftar</v-toolbar-title>
+        <v-toolbar flat class="mb-0 pb-0">
+            <v-toolbar-title class="text-capitalize mx-auto">laporan data siswa tahun ajaran 2022/2023</v-toolbar-title>
         </v-toolbar>
+        <p class="font-weight-bold body-2 mx-auto text-center">SMK Yapim Indrapura</p>
         <v-card flat>
           <v-card-title class="body-2">Filter</v-card-title>
           <v-row class="mx-1">

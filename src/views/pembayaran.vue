@@ -122,11 +122,11 @@ export default {
       });
     },
   },
-  mounted() {
+  async mounted() {
     let script = document.createElement("script");
-    script.setAttribute("src", "https://app.sandbox.midtrans.com/snap/snap.js");
-    script.setAttribute("data-client-key", "SB-Mid-client-MWdTlt34WEFUFtaF");
-    this.$refs.container.appendChild(script);
+    await script.setAttribute("src", "https://app.sandbox.midtrans.com/snap/snap.js");
+    await script.setAttribute("data-client-key", "SB-Mid-client-MWdTlt34WEFUFtaF");
+    await this.$refs.container.appendChild(script);
     console.log(this.id);
   },
 };
