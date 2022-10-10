@@ -12,7 +12,7 @@
         <v-card class="mx-2" color="#439534" flat>
           <v-card-title class="body-2"> Siswa Mendaftar TKR </v-card-title>
           <v-card-subtitle class="font-weight-bold">
-            {{ jumlahtkr ? jumlahtkrj : 0 }} Orang
+            {{ jumlahtkr ? jumlahtkr : 0 }} Orang
           </v-card-subtitle>
         </v-card>
       </div>

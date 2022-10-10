@@ -17,6 +17,15 @@
             <v-divider class="second mb-5"></v-divider>
             <v-row>
               <v-col cols="12">
+                <v-select
+                  dense
+                  :items="['2022/2023', '2023/2024', '2024/2025', '2025/2026']"
+                  label="Pilih Tahun Ajaran"
+                  required
+                  v-model="siswa.tahun_ajaran"
+                  :rules="[(v) => !!v || 'Tidak Boleh Kosong']"
+                  outlined
+                ></v-select>
                 <v-text-field
                   label="Masukan Nama Lengkap"
                   outlined
@@ -420,6 +429,7 @@ export default {
         status_bayar: "belum bayar",
         telp: "",
         jurusan: "",
+        tahun_ajaran:"",
       },
       loading: false,
     };

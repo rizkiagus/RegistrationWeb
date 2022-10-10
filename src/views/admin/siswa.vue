@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      ref="myTable"
       :headers="headers"
       :items="itemsWithIndex"
       :search="search"
@@ -42,6 +43,16 @@
               >
               </v-select>
             </v-col>
+            <v-col>
+              <v-select
+                outlined
+                dense
+                label="Filter Tahun Ajaran"
+                v-model="pilihtahun"
+                :items="tahun"
+              >
+              </v-select>
+            </v-col>
           </v-row>
         </v-card>
       </template>
@@ -66,7 +77,30 @@ export default {
     name: "makan",
     search: "",
     pilih: null,
+    pilihtahun: null,
     year: new Date(),
+    tahun: [
+      {
+        text: "Semua",
+        value: null,
+      },
+      {
+        text: '2022/2023',
+        value: "2022/2023"
+      },
+      {
+        text: '2023/2024',
+        value: "2023/2024"
+      },
+      {
+        text: '2024/2025',
+        value: "2024/2025"
+      },
+      {
+        text: '2025/2026',
+        value: "2025/2026"
+      },
+    ],
     jurusan: [
       {
         text: "Semua",
@@ -125,6 +159,12 @@ export default {
           filter: this.filterJurusan,
           sortable: false,
         },
+        {
+          text: "T/A",
+          value: "tahun_ajaran",
+          filter: this.filterTahun,
+          sortable: false,
+        },
         { text: "Nomor HP", value: "telp", sortable: false },
         { text: "Aksi", value: "id", align: "center", sortable: false },
       ];
@@ -137,6 +177,11 @@ export default {
         ...dataSiswa,
         index: index + 1,
       }));
+    },
+    itemsData(){
+      return this.$refs['myTable'].map((itemsWithIndex) => ({
+        ...itemsWithIndex
+      }))
     },
     dataSiswa() {
       return this.$store.state.siswa.datasiswa;
@@ -161,6 +206,8 @@ export default {
 
   methods: {
     download() {
+      const data = this.$refs['myTable'].items
+      console.log(data)
       const columns = [
         { title: "No", dataKey: "index" },
         { title: "Nama", dataKey: "nama" },
@@ -178,7 +225,7 @@ export default {
       doc.setFontSize(16).text(`Daftar Siswa Yang Mendaftar Pada Tahun Ajaran ${this.year.getFullYear()} / ${this.year.getFullYear()+1}`, 0.5, 1.0);
       autoTable(doc, {
         columns,
-        body: this.itemsWithIndex,
+        body: data,
         margin: { left: 0.5, top: 1.25 },
       });
       doc.save(pdfName + ".pdf");
@@ -188,6 +235,12 @@ export default {
         return true;
       }
       return value === this.pilih;
+    },
+    filterTahun(value) {
+      if (!this.pilihtahun) {
+        return true;
+      }
+      return value === this.pilihtahun;
     },
     goto(id) {
       this.gotoIndex = router.push(`/siswa/detail/${id}`);
