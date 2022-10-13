@@ -19,8 +19,9 @@
               <v-col cols="12">
                 <v-select
                   dense
-                  :items="['2022/2023', '2023/2024', '2024/2025', '2025/2026']"
+                  :items="listtahun"
                   label="Pilih Tahun Ajaran"
+                  :value="listtahun.value"
                   required
                   v-model="siswa.tahun_ajaran"
                   :rules="[(v) => !!v || 'Tidak Boleh Kosong']"
@@ -411,6 +412,28 @@ export default {
         skhun_image: "",
         tahun: "",
       },
+      listtahun: [
+        {
+          text: '2022/2023',
+          value: '2022-2023'
+
+        },
+        {
+          text: '2023/2024',
+          value: '2023-2024'
+
+        },
+        {
+          text: '2024/2025',
+          value: '2024-2025'
+
+        },
+        {
+          text: '2025/2026',
+          value: '2025-2026'
+
+        },
+      ],
       foto: null,
       ijazah: null,
       skhun: null,

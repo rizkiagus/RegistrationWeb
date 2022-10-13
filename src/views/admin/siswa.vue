@@ -44,13 +44,15 @@
               >
               </v-select>
             </v-col>
-            <v-col>
+            <v-col >
               <v-select
                 outlined
                 dense
                 label="Filter Tahun Ajaran"
                 v-model="pilihtahun"
                 :items="tahun"
+                @input="getDataByTahun($event)"
+                
               >
               </v-select>
             </v-col>
@@ -72,71 +74,75 @@
 import router from "@/router";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import axios from 'axios';
 export default {
   name: "SiswaView",
-  data: () => ({
-    name: "makan",
-    search: "",
-    pilih: null,
-    pilihtahun: null,
-    year: new Date(),
-    tahun: [
-      {
-        text: "Semua",
-        value: null,
-      },
-      {
-        text: '2022/2023',
-        value: "2022/2023"
-      },
-      {
-        text: '2023/2024',
-        value: "2023/2024"
-      },
-      {
-        text: '2024/2025',
-        value: "2024/2025"
-      },
-      {
-        text: '2025/2026',
-        value: "2025/2026"
-      },
-    ],
-    jurusan: [
-      {
-        text: "Semua",
-        value: null,
-      },
-      {
-        text: "SMK: Teknik Komputer Jaringan",
-        value: "SMK: Teknik Komputer Jaringan",
-      },
-      {
-        text: "SMK: Teknik Kendaraan Ringan",
-        value: "SMK: Teknik Kendaraan Ringan",
-      },
-    ],
-    dialog: false,
-    dialogDelete: false,
-    gotoIndex: "",
-    desserts: [],
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+  data()
+    {
+      return {
+        name: "makan",
+        search: "",
+        pilih: null,
+        dataTable: null,
+        pilihtahun: null,
+        year: new Date(),
+        tahun: [
+          {
+            text: "Semua",
+            value: null,
+          },
+          {
+            text: '2022-2023',
+            value: '2022-2023'
+          },
+          {
+            text: '2023-2024',
+            value: '2023-2024'
+          },
+          {
+            text: '2024-2025',
+            value: '2024-2025'
+          },
+          {
+            text: '2025-2026',
+            value: '2025-2026'
+          },
+        ],
+        jurusan: [
+          {
+            text: "Semua",
+            value: null,
+          },
+          {
+            text: "SMK: Teknik Komputer Jaringan",
+            value: "SMK: Teknik Komputer Jaringan",
+          },
+          {
+            text: "SMK: Teknik Kendaraan Ringan",
+            value: "SMK: Teknik Kendaraan Ringan",
+          },
+        ],
+        dialog: false,
+        dialogDelete: false,
+        gotoIndex: "",
+        desserts: [],
+        editedIndex: -1,
+        editedItem: {
+          name: "",
+          calories: 0,
+          fat: 0,
+          carbs: 0,
+          protein: 0,
+        },
+        defaultItem: {
+          name: "",
+          calories: 0,
+          fat: 0,
+          carbs: 0,
+          protein: 0,
+        },
+      }
     },
-    defaultItem: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
-  }),
-
   computed: {
     headers() {
       return [
@@ -180,7 +186,7 @@ export default {
       }));
     },
     itemsData(){
-      return this.$refs['myTable'].map((itemsWithIndex) => ({
+      return this.$refs['myTable'].items.map((itemsWithIndex) => ({
         ...itemsWithIndex
       }))
     },
@@ -206,9 +212,20 @@ export default {
   },
 
   methods: {
+    getDataByTahun(tahun){
+      axios.get(`http://127.0.0.1:8000/api/siswa/tahunajaran/${tahun}`)
+      .then((response) => {
+        this.dataTable = response.data.data
+        console.log(response.data.data)
+      }).catch((error) => {
+          console.log(error);
+          this.loading = false;
+        });
+    },
     download() {
-      const data = this.$refs['myTable'].items
-      console.log(data)
+      // const data = this.$refs['myTable'].items.map((item) => ({
+      //   ...item
+      // }))
       const columns = [
         { title: "No", dataKey: "index" },
         { title: "Nama", dataKey: "nama" },
@@ -223,10 +240,10 @@ export default {
         unit: "in",
         format: "letter",
       });
-      doc.setFontSize(16).text(`Daftar Siswa Yang Mendaftar Pada Tahun Ajaran ${this.year.getFullYear()} / ${this.year.getFullYear()+1}`, 0.5, 1.0);
+      doc.setFontSize(16).text(`Daftar Siswa Yang Mendaftar`, 0.5, 1.0);
       autoTable(doc, {
         columns,
-        body: data,
+        body: this.dataTable,
         margin: { left: 0.5, top: 1.25 },
       });
       doc.save(pdfName + ".pdf");
