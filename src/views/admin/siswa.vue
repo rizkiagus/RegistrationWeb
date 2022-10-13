@@ -122,6 +122,7 @@ export default {
             value: "SMK: Teknik Kendaraan Ringan",
           },
         ],
+        selectId: null,
         dialog: false,
         dialogDelete: false,
         gotoIndex: "",
@@ -216,6 +217,7 @@ export default {
       axios.get(`http://127.0.0.1:8000/api/siswa/tahunajaran/${tahun}`)
       .then((response) => {
         this.dataTable = response.data.data
+        this.selectId = tahun
         console.log(response.data.data)
       }).catch((error) => {
           console.log(error);
@@ -240,7 +242,7 @@ export default {
         unit: "in",
         format: "letter",
       });
-      doc.setFontSize(16).text(`Daftar Siswa Yang Mendaftar`, 0.5, 1.0);
+      doc.setFontSize(16).text(`Daftar Siswa Yang Mendaftar ${this.selectId}`, 0.5, 1.0);
       autoTable(doc, {
         columns,
         body: this.dataTable,
