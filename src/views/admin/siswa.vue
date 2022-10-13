@@ -89,7 +89,7 @@ export default {
         tahun: [
           {
             text: "Semua",
-            value: null,
+            value: "semua",
           },
           {
             text: '2022-2023',
