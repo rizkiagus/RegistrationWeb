@@ -89,7 +89,7 @@ export default {
         tahun: [
           {
             text: "Semua",
-            value: "semua",
+            value: null,
           },
           {
             text: '2022-2023',
@@ -187,8 +187,9 @@ export default {
       }));
     },
     itemsData(){
-      return this.$refs['myTable'].items.map((itemsWithIndex) => ({
-        ...itemsWithIndex
+    return this.dataTable?.map((item, index) => ({
+        ...item,
+        index: index+1
       }))
     },
     dataSiswa() {
@@ -214,7 +215,7 @@ export default {
 
   methods: {
     getDataByTahun(tahun){
-      axios.get(`http://127.0.0.1:8000/api/siswa/tahunajaran/${tahun}`)
+      axios.get(`http://127.0.0.1:8000/api/siswa/tahunajaran/${tahun === null ? 'semua' : tahun}`)
       .then((response) => {
         this.dataTable = response.data.data
         this.selectId = tahun
@@ -225,8 +226,9 @@ export default {
         });
     },
     download() {
-      // const data = this.$refs['myTable'].items.map((item) => ({
-      //   ...item
+      // const data = this.dataTable?.map((item, index) => ({
+      //   ...item,
+      //   index: index+1
       // }))
       const columns = [
         { title: "No", dataKey: "index" },
@@ -242,10 +244,10 @@ export default {
         unit: "in",
         format: "letter",
       });
-      doc.setFontSize(16).text(`Daftar Siswa Yang Mendaftar ${this.selectId}`, 0.5, 1.0);
+      doc.setFontSize(16).text(`Daftar Siswa Yang Mendaftar ${this.selectId === null ? "Semua Tahun" : this.selectId}`, 0.5, 1.0);
       autoTable(doc, {
         columns,
-        body: this.dataTable,
+        body: this.itemsData != null ? this.itemsData : this.itemsWithIndex,
         margin: { left: 0.5, top: 1.25 },
       });
       doc.save(pdfName + ".pdf");
